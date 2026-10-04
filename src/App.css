@@ -1,0 +1,148 @@
+#root {
+  min-height: 100vh;
+}
+
+/* Navigation */
+header {
+  height: 82px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #25252d;
+  background: rgba(11, 11, 15, 0.96);
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #9d5cff;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+}
+
+nav a {
+  color: #b8b8c2;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+nav a:hover {
+  color: #ffffff;
+}
+
+/* Main Page */
+.page {
+  min-height: calc(100vh - 82px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 7%;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(157, 92, 255, 0.15), transparent 35%),
+    #0b0b0f;
+}
+
+.hero {
+  width: 100%;
+  max-width: 850px;
+  text-align: center;
+}
+
+.eyebrow {
+  color: #9d5cff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin-bottom: 22px;
+}
+
+.hero h1,
+.page h1 {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -3px;
+  margin-bottom: 22px;
+}
+
+.subtitle,
+.page > p {
+  color: #a7a7b2;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* StreamList Form */
+.stream-form {
+  max-width: 680px;
+  margin: 42px auto 0;
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  background: #17171d;
+  border: 1px solid #292932;
+  border-radius: 14px;
+}
+
+.stream-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 18px;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.stream-form input::placeholder {
+  color: #70707c;
+}
+
+.stream-form button {
+  padding: 16px 22px;
+  border: none;
+  border-radius: 9px;
+  background: #9d5cff;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.stream-form button:hover {
+  transform: translateY(-2px);
+  background: #ad78ff;
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+  header {
+    height: auto;
+    padding: 22px 6%;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  nav {
+    gap: 20px;
+  }
+
+  .page {
+    min-height: calc(100vh - 120px);
+  }
+
+  .stream-form {
+    flex-direction: column;
+  }
+
+  .stream-form button {
+    width: 100%;
+  }
+}
