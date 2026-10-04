@@ -175,17 +175,66 @@ function Movies({ items, setItems }) {
   );
 }
 
-function Cart({ items }) {
+function Cart() {
+  const [items, setItems] = useState(() => {
+    const savedItems = localStorage.getItem("streamList");
+    return savedItems ? JSON.parse(savedItems) : [];
+  });
+
+  const removeItem = (id) => {
+    const updatedItems = items.filter((item) => item.id !== id);
+    setItems(updatedItems);
+    localStorage.setItem("streamList", JSON.stringify(updatedItems));
+  };
+      const toggleWatched = (id) => {
+  const updatedItems = items.map((item) =>
+    item.id === id
+      ? { ...item, watched: !item.watched }
+      : item
+  );
+
+  setItems(updatedItems);
+  localStorage.setItem("streamList", JSON.stringify(updatedItems));
+};
   return (
     <main className="page">
-      <div className="hero">
+      <div className="hero cart-hero">
         <p className="eyebrow">YOUR COLLECTION</p>
-        <h1>Cart</h1>
-
+        <h1>My StreamList</h1>
         <p className="subtitle">
-          You currently have {items.length}{" "}
-          {items.length === 1 ? "selection" : "selections"} in your StreamList.
+          {items.length === 0
+            ? "Your StreamList is empty."
+            : `${items.length} ${
+                items.length === 1 ? "title" : "titles"
+              } saved to your StreamList.`}
         </p>
+
+        <div className="cart-list">
+          {items.map((item) => (
+            <div className="cart-item" key={item.id}>
+              <div className="cart-info">
+                <span className="play-icon">▶</span>
+                <span className={item.watched ? "stream-title watched" : "stream-title"}>
+                  {item.title}
+                </span>
+              </div>
+                  <button
+    type="button"
+    className="watch-button"
+    onClick={() => toggleWatched(item.id)}
+  >
+    {item.watched ? "✓ Watched" : "Mark Watched"}
+  </button>
+              <button
+                type="button"
+                className="cart-remove"
+                onClick={() => removeItem(item.id)}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </main>
   );
