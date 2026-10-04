@@ -110,14 +110,39 @@ function StreamList() {
 }
 
 function Movies() {
+  const movies = [
+    { id: 1, title: "The Batman", year: "2022", genre: "Action" },
+    { id: 2, title: "Dune: Part Two", year: "2024", genre: "Sci-Fi" },
+    { id: 3, title: "John Wick: Chapter 4", year: "2023", genre: "Action" },
+    { id: 4, title: "Spider-Man: Across the Spider-Verse", year: "2023", genre: "Animation" },
+    { id: 5, title: "Creed III", year: "2023", genre: "Drama" },
+    { id: 6, title: "Godzilla x Kong", year: "2024", genre: "Action" },
+  ];
+
   return (
     <main className="page">
-      <div className="hero">
+      <div className="hero movies-hero">
         <p className="eyebrow">DISCOVER</p>
         <h1>Movies</h1>
         <p className="subtitle">
           Browse movies for your StreamList.
         </p>
+
+        <div className="movie-grid">
+          {movies.map((movie) => (
+            <div className="movie-card" key={movie.id}>
+              <div className="movie-poster">
+                <span>▶</span>
+              </div>
+
+              <div className="movie-details">
+                <h2>{movie.title}</h2>
+                <p>{movie.year} • {movie.genre}</p>
+                <button type="button">+ Add to StreamList</button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </main>
   );

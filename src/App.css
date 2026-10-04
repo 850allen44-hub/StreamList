@@ -309,3 +309,86 @@ body {
     flex: 1;
   }
 }
+
+.movies-hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+
+.movie-grid {
+  width: 100%;
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  text-align: left;
+}
+
+.movie-card {
+  background: #15151d;
+  border: 1px solid #292936;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  border-color: #9857ff;
+}
+
+.movie-poster {
+  height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #21152f, #0d0d13);
+  font-size: 32px;
+  color: #9857ff;
+}
+
+.movie-details {
+  padding: 20px;
+}
+
+.movie-details h2 {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.movie-details p {
+  margin: 0 0 18px;
+  color: #9999aa;
+  font-size: 14px;
+}
+
+.movie-details button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 9px;
+  background: #9857ff;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.movie-details button:hover {
+  background: #aa72ff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 850px) {
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 550px) {
+  .movie-grid {
+    grid-template-columns: 1fr;
+  }
+}
