@@ -1,47 +1,52 @@
-/* ===== STREAMLIST ===== */
-
 * {
   box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  background: #0b0b0f;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #root {
   min-height: 100vh;
 }
 
-body {
-  margin: 0;
-  background: #0b0b0f;
-  color: #ffffff;
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* NAVIGATION */
 
-/* ===== NAVIGATION ===== */
-
-header {
+.navbar {
   height: 82px;
   padding: 0 7%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #25252d;
-  background: rgba(11, 11, 15, 0.96);
+  background: #0b0b0f;
 }
 
 .logo {
-  margin: 0;
+  color: #9d5cff;
   font-size: 1.4rem;
   font-weight: 800;
   letter-spacing: 3px;
-  color: #9d5cff;
+  text-decoration: none;
 }
 
-nav {
+.nav-links {
   display: flex;
   align-items: center;
   gap: 38px;
 }
 
-nav a {
+.nav-links a {
   color: #b8b8c2;
   text-decoration: none;
   font-size: 0.95rem;
@@ -49,56 +54,54 @@ nav a {
   transition: 0.2s ease;
 }
 
-nav a:hover {
+.nav-links a:hover {
   color: #ffffff;
 }
 
-/* ===== MAIN PAGE ===== */
+/* MAIN PAGE */
 
 .page {
   min-height: calc(100vh - 82px);
-  padding: 90px 7% 60px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 85px 7% 60px;
   background:
-    radial-gradient(
-      circle at 50% 10%,
-      rgba(157, 92, 255, 0.15),
-      transparent 35%
-    ),
+    radial-gradient(circle at 50% 10%, rgba(157, 92, 255, 0.15), transparent 35%),
     #0b0b0f;
 }
 
 .hero {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 850px;
   text-align: center;
 }
 
 .eyebrow {
-  margin: 0 0 22px;
   color: #9d5cff;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 4px;
+  margin: 0 0 25px;
 }
 
-.hero h1,
-.page h1 {
-  margin: 0 0 22px;
+.hero h1 {
+  margin: 0 0 25px;
+  color: #ffffff;
   font-size: clamp(2.8rem, 6vw, 5rem);
   line-height: 1.05;
   font-weight: 800;
   letter-spacing: -3px;
 }
 
-.subtitle,
-.page > p {
+.subtitle {
+  margin: 0;
   color: #a7a7b2;
   font-size: 1.1rem;
   line-height: 1.7;
 }
 
-/* ===== ADD MOVIE FORM ===== */
+/* ADD MOVIE FORM */
 
 .stream-form {
   width: 100%;
@@ -133,23 +136,23 @@ nav a:hover {
   border-radius: 9px;
   background: #9d5cff;
   color: #ffffff;
-  font-size: 0.95rem;
   font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: 0.2s ease;
 }
 
 .stream-form button:hover {
   background: #ad78ff;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
-/* ===== SAVED STREAMLIST ===== */
+/* WATCHLIST */
 
 .stream-list {
   width: 100%;
   max-width: 680px;
-  margin: 28px auto 0;
+  margin: 26px auto 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -157,109 +160,110 @@ nav a:hover {
 
 .stream-item {
   width: 100%;
-  padding: 18px 20px;
+  min-height: 62px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  gap: 20px;
   background: #17171d;
   border: 1px solid #292932;
   border-radius: 12px;
-
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
-
-  text-align: left;
   transition: 0.2s ease;
 }
 
 .stream-item:hover {
-  border-color: #9d5cff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(157, 92, 255, 0.12);
+  border-color: #4d3a68;
 }
 
-.stream-item::before {
-  content: "▶";
-  margin-right: 14px;
+.stream-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.play-icon {
   color: #9d5cff;
   font-size: 0.8rem;
 }
 
-/* ===== MOBILE ===== */
-
-@media (max-width: 650px) {
-  header {
-    height: auto;
-    padding: 22px 6%;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  nav {
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .page {
-    min-height: calc(100vh - 120px);
-    padding: 65px 6% 40px;
-  }
-
-  .hero h1,
-  .page h1 {
-    font-size: 2.8rem;
-    letter-spacing: -2px;
-  }
-
-  .stream-form {
-    flex-direction: column;
-  }
-
-  .stream-form button {
-    width: 100%;
-  }
-}
-
-/* ===== NAVBAR FIX ===== */
-
-.navbar {
-  height: 82px;
-  padding: 0 7%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #25252d;
-  background: rgba(11, 11, 15, 0.96);
-}
-
-.navbar .logo {
-  color: #9d5cff;
-  text-decoration: none;
-  font-size: 1.4rem;
-  font-weight: 800;
-  letter-spacing: 3px;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 38px;
-}
-
-.nav-links a {
-  color: #b8b8c2;
-  text-decoration: none;
+.stream-title {
+  color: #ffffff;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 700;
+}
+
+.stream-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* IMPORTANT: overrides generic form button styling */
+
+.stream-item .watch-button {
+  appearance: none;
+  padding: 10px 14px;
+  border: 1px solid #9d5cff;
+  border-radius: 8px;
+  background: #9d5cff;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
   transition: 0.2s ease;
 }
 
-.nav-links a:hover {
-  color: #ffffff;
+.stream-item .watch-button:hover {
+  background: #ad78ff;
+  border-color: #ad78ff;
 }
+
+.stream-item .remove-button {
+  appearance: none;
+  padding: 10px 14px;
+  border: 1px solid #3a3a44;
+  border-radius: 8px;
+  background: #202027;
+  color: #b8b8c2;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.stream-item .remove-button:hover {
+  color: #ff7082;
+  border-color: #ff5c70;
+  background: rgba(255, 92, 112, 0.08);
+}
+
+/* WATCHED STATE */
+
+.stream-item.watched {
+  opacity: 0.65;
+}
+
+.stream-item.watched .stream-title {
+  color: #8a8a95;
+  text-decoration: line-through;
+}
+
+.stream-item.watched .play-icon {
+  color: #70707c;
+}
+
+.empty-message {
+  margin: 0;
+  padding: 18px;
+  color: #70707c;
+  text-align: center;
+}
+
+/* MOBILE */
 
 @media (max-width: 650px) {
   .navbar {
@@ -271,7 +275,37 @@ nav a:hover {
 
   .nav-links {
     gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+  }
+
+  .page {
+    min-height: calc(100vh - 120px);
+    padding: 55px 6%;
+  }
+
+  .hero h1 {
+    font-size: 2.8rem;
+    letter-spacing: -2px;
+  }
+
+  .stream-form {
+    flex-direction: column;
+  }
+
+  .stream-form button {
+    width: 100%;
+  }
+
+  .stream-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .stream-actions {
+    width: 100%;
+  }
+
+  .stream-item .watch-button,
+  .stream-item .remove-button {
+    flex: 1;
   }
 }
