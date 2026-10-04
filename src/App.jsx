@@ -16,7 +16,7 @@ function StreamList({ items, setItems }) {
       watched: false,
     };
 
-    setItems([...items, newItem]);
+    console.log(newItem);
     event.target.reset();
   };
 
