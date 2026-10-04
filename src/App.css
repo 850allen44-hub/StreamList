@@ -1,8 +1,22 @@
+/* ===== STREAMLIST ===== */
+
+* {
+  box-sizing: border-box;
+}
+
 #root {
   min-height: 100vh;
 }
 
-/* Navigation */
+body {
+  margin: 0;
+  background: #0b0b0f;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ===== NAVIGATION ===== */
+
 header {
   height: 82px;
   padding: 0 7%;
@@ -14,6 +28,7 @@ header {
 }
 
 .logo {
+  margin: 0;
   font-size: 1.4rem;
   font-weight: 800;
   letter-spacing: 3px;
@@ -28,6 +43,7 @@ nav {
 
 nav a {
   color: #b8b8c2;
+  text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
   transition: 0.2s ease;
@@ -37,39 +53,42 @@ nav a:hover {
   color: #ffffff;
 }
 
-/* Main Page */
+/* ===== MAIN PAGE ===== */
+
 .page {
   min-height: calc(100vh - 82px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 60px 7%;
+  padding: 90px 7% 60px;
   background:
-    radial-gradient(circle at 50% 20%, rgba(157, 92, 255, 0.15), transparent 35%),
+    radial-gradient(
+      circle at 50% 10%,
+      rgba(157, 92, 255, 0.15),
+      transparent 35%
+    ),
     #0b0b0f;
 }
 
 .hero {
   width: 100%;
-  max-width: 850px;
+  max-width: 900px;
+  margin: 0 auto;
   text-align: center;
 }
 
 .eyebrow {
+  margin: 0 0 22px;
   color: #9d5cff;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 4px;
-  margin-bottom: 22px;
 }
 
 .hero h1,
 .page h1 {
+  margin: 0 0 22px;
   font-size: clamp(2.8rem, 6vw, 5rem);
   line-height: 1.05;
   font-weight: 800;
   letter-spacing: -3px;
-  margin-bottom: 22px;
 }
 
 .subtitle,
@@ -79,8 +98,10 @@ nav a:hover {
   line-height: 1.7;
 }
 
-/* StreamList Form */
+/* ===== ADD MOVIE FORM ===== */
+
 .stream-form {
+  width: 100%;
   max-width: 680px;
   margin: 42px auto 0;
   padding: 8px;
@@ -99,6 +120,7 @@ nav a:hover {
   background: transparent;
   border: none;
   outline: none;
+  font-size: 1rem;
 }
 
 .stream-form input::placeholder {
@@ -111,17 +133,62 @@ nav a:hover {
   border-radius: 9px;
   background: #9d5cff;
   color: #ffffff;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   transition: 0.2s ease;
 }
 
 .stream-form button:hover {
-  transform: translateY(-2px);
   background: #ad78ff;
+  transform: translateY(-2px);
 }
 
-/* Mobile */
+/* ===== SAVED STREAMLIST ===== */
+
+.stream-list {
+  width: 100%;
+  max-width: 680px;
+  margin: 28px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stream-item {
+  width: 100%;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #17171d;
+  border: 1px solid #292932;
+  border-radius: 12px;
+
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+
+  text-align: left;
+  transition: 0.2s ease;
+}
+
+.stream-item:hover {
+  border-color: #9d5cff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(157, 92, 255, 0.12);
+}
+
+.stream-item::before {
+  content: "▶";
+  margin-right: 14px;
+  color: #9d5cff;
+  font-size: 0.8rem;
+}
+
+/* ===== MOBILE ===== */
+
 @media (max-width: 650px) {
   header {
     height: auto;
@@ -132,10 +199,19 @@ nav a:hover {
 
   nav {
     gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .page {
     min-height: calc(100vh - 120px);
+    padding: 65px 6% 40px;
+  }
+
+  .hero h1,
+  .page h1 {
+    font-size: 2.8rem;
+    letter-spacing: -2px;
   }
 
   .stream-form {
@@ -144,5 +220,58 @@ nav a:hover {
 
   .stream-form button {
     width: 100%;
+  }
+}
+
+/* ===== NAVBAR FIX ===== */
+
+.navbar {
+  height: 82px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #25252d;
+  background: rgba(11, 11, 15, 0.96);
+}
+
+.navbar .logo {
+  color: #9d5cff;
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+}
+
+.nav-links a {
+  color: #b8b8c2;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 650px) {
+  .navbar {
+    height: auto;
+    padding: 22px 6%;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .nav-links {
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
