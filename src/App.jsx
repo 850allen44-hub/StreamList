@@ -1,18 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 
 function StreamList() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    const savedItems = localStorage.getItem("streamList");
+    return savedItems ? JSON.parse(savedItems) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("streamList", JSON.stringify(items));
+  }, [items]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const title = event.target.elements.title.value;
+    const title = event.target.elements.title.value.trim();
 
-    setItems([...items, title]);
+    if (!title) return;
 
+    const newItem = {
+      id: Date.now(),
+      title: title,
+      watched: false,
+    };
+
+    setItems([...items, newItem]);
     event.target.reset();
+  };
+
+  const toggleWatched = (id) => {
+    setItems(
+      items.map((item) =>
+        item.id === id
+          ? { ...item, watched: !item.watched }
+          : item
+      )
+    );
+  };
+
+  const removeItem = (id) => {
+    setItems(items.filter((item) => item.id !== id));
   };
 
   return (
@@ -38,11 +66,43 @@ function StreamList() {
         </form>
 
         <div className="stream-list">
-          {items.map((item, index) => (
-            <div className="stream-item" key={index}>
-              {item}
-            </div>
-          ))}
+          {items.length === 0 ? (
+            <p className="empty-message">
+              Your StreamList is empty. Add something above.
+            </p>
+          ) : (
+            items.map((item) => (
+              <div
+                className={`stream-item ${
+                  item.watched ? "watched" : ""
+                }`}
+                key={item.id}
+              >
+                <div className="stream-info">
+                  <span className="play-icon">▶</span>
+                  <span className="stream-title">{item.title}</span>
+                </div>
+
+                <div className="stream-actions">
+                  <button
+                    type="button"
+                    className="watch-button"
+                    onClick={() => toggleWatched(item.id)}
+                  >
+                    {item.watched ? "✓ Watched" : "Mark Watched"}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="remove-button"
+                    onClick={() => removeItem(item.id)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </main>
@@ -55,7 +115,9 @@ function Movies() {
       <div className="hero">
         <p className="eyebrow">DISCOVER</p>
         <h1>Movies</h1>
-        <p className="subtitle">Browse movies for your StreamList.</p>
+        <p className="subtitle">
+          Browse movies for your StreamList.
+        </p>
       </div>
     </main>
   );
@@ -67,7 +129,9 @@ function Cart() {
       <div className="hero">
         <p className="eyebrow">YOUR COLLECTION</p>
         <h1>Cart</h1>
-        <p className="subtitle">Your saved selections will appear here.</p>
+        <p className="subtitle">
+          Your saved selections will appear here.
+        </p>
       </div>
     </main>
   );
