@@ -451,3 +451,57 @@ body {
   color: #9852ff;
   font-size: 18px;
 }
+
+
+/* Week 2 improvements */
+
+.material-symbols-outlined {
+  font-size: 20px;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.nav-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stream-actions button,
+.cart-item button,
+.movie-details button,
+.stream-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.stream-info,
+.cart-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stream-form select {
+  padding: 12px;
+  border-radius: 8px;
+  background: #181326;
+  color: white;
+  border: 1px solid #514269;
+}
+
+.stream-info input {
+  padding: 10px;
+  border-radius: 8px;
+  background: #181326;
+  color: white;
+  border: 1px solid #7962a6;
+}
+
+.stream-title.watched,
+.stream-item.watched .stream-title {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
