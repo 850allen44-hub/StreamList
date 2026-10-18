@@ -256,50 +256,55 @@ function StreamList({ items, setItems }) {
   );
 }
 
+
 function Movies({ items, setItems }) {
-  const movies = [
-    {
-      id: 1,
-      title: "The Batman",
-      year: "2022",
-      genre: "Action",
-    },
-    {
-      id: 2,
-      title: "Dune: Part Two",
-      year: "2024",
-      genre: "Sci-Fi",
-    },
-    {
-      id: 3,
-      title: "John Wick: Chapter 4",
-      year: "2023",
-      genre: "Action",
-    },
-    {
-      id: 4,
-      title: "Spider-Man: Across the Spider-Verse",
-      year: "2023",
-      genre: "Animation",
-    },
-    {
-      id: 5,
-      title: "Creed III",
-      year: "2023",
-      genre: "Drama",
-    },
-    {
-      id: 6,
-      title: "Godzilla x Kong",
-      year: "2024",
-      genre: "Action",
-    },
-  ];
+  const [search, setSearch] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const searchMovies = async (event) => {
+    event.preventDefault();
+
+    if (!search.trim()) return;
+
+    setLoading(true);
+    setError("");
+    setMovies([]);
+
+    try {
+      const token = import.meta.env.VITE_TMDB_TOKEN;
+
+      if (!token) {
+        throw new Error("TMDB token is missing.");
+      }
+
+      const response = await fetch(
+        `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(search.trim())}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Unable to retrieve movies from TMDB.");
+      }
+
+      const data = await response.json();
+      setMovies(data.results || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const addMovie = (movie) => {
     const alreadyAdded = items.some(
-      (item) =>
-        item.title.toLowerCase() === movie.title.toLowerCase()
+      (item) => item.title.toLowerCase() === movie.title.toLowerCase()
     );
 
     if (alreadyAdded) return;
@@ -321,55 +326,84 @@ function Movies({ items, setItems }) {
         <h1>Movies</h1>
 
         <p className="subtitle">
-          Browse movies for your StreamList.
+          Search for movies using The Movie Database (TMDB).
         </p>
+
+        <form className="stream-form" onSubmit={searchMovies}>
+          <input
+            type="search"
+            placeholder="Search movies..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            aria-label="Search TMDB movies"
+            required
+          />
+
+          <button type="submit">
+            <Icon name="search" /> Search
+          </button>
+        </form>
+
+        {loading && <p className="subtitle">Searching movies...</p>}
+        {error && <p className="empty-message">{error}</p>}
 
         <div className="movie-grid">
           {movies.map((movie) => {
             const alreadyAdded = items.some(
               (item) =>
-                item.title.toLowerCase() ===
-                movie.title.toLowerCase()
+                item.title.toLowerCase() === movie.title.toLowerCase()
             );
 
             return (
               <div className="movie-card" key={movie.id}>
                 <div className="movie-poster">
-                  <Icon name="theaters" />
+                  {movie.poster_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                      alt={`${movie.title} poster`}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <Icon name="theaters" />
+                  )}
                 </div>
 
                 <div className="movie-details">
                   <h2>{movie.title}</h2>
 
                   <p>
-                    {movie.year} • {movie.genre}
+                    {movie.release_date
+                      ? movie.release_date.slice(0, 4)
+                      : "Year unavailable"}
+                    {" • "}
+                    Rating: {movie.vote_average?.toFixed(1) ?? "N/A"}
                   </p>
+
+                  <p>{movie.overview || "No description available."}</p>
 
                   <button
                     type="button"
                     onClick={() => addMovie(movie)}
                     disabled={alreadyAdded}
                   >
-                    <Icon
-                      name={
-                        alreadyAdded
-                          ? "check_circle"
-                          : "add_circle"
-                      }
-                    />
-                    {alreadyAdded
-                      ? "Added"
-                      : "Add to StreamList"}
+                    <Icon name={alreadyAdded ? "check_circle" : "add_circle"} />
+                    {alreadyAdded ? "Added" : "Add to StreamList"}
                   </button>
                 </div>
               </div>
             );
           })}
         </div>
+
+        <p className="subtitle">
+          Movie information provided by TMDB.
+          This product uses the TMDB API but is not endorsed or certified by TMDB.
+        </p>
       </div>
     </main>
   );
 }
+
 
 function Cart({ items, setItems }) {
   const removeItem = (id) => {
