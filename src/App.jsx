@@ -18,18 +18,149 @@ function Icon({ name }) {
   );
 }
 
-function StreamList({ items, setItems }) {
-  const [editingId, setEditingId] = useState(null);
-  const [editTitle, setEditTitle] = useState("");
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
-
+function AddTitleForm({ onAdd }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const title = event.target.elements.title.value.trim();
     if (!title) return;
 
+    onAdd(title);
+    event.target.reset();
+  };
+
+  return (
+    <form className="stream-form" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="title"
+        placeholder="Enter a movie or show..."
+        aria-label="Movie or show title"
+        required
+      />
+
+      <button type="submit">
+        <Icon name="add_circle" /> Add to StreamList
+      </button>
+    </form>
+  );
+}
+
+function FilterBar({ search, setSearch, filter, setFilter }) {
+  return (
+    <div className="stream-form">
+      <input
+        type="search"
+        placeholder="Search your StreamList..."
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+        aria-label="Search saved titles"
+      />
+
+      <select
+        value={filter}
+        onChange={(event) => setFilter(event.target.value)}
+        aria-label="Filter watchlist"
+      >
+        <option value="all">All Titles</option>
+        <option value="unwatched">Not Watched</option>
+        <option value="watched">Watched</option>
+      </select>
+    </div>
+  );
+}
+
+function StreamItem({
+  item,
+  isEditing,
+  editTitle,
+  onEditTitle,
+  onSave,
+  onCancel,
+  onToggle,
+  onRemove,
+  onStartEdit,
+}) {
+  return (
+    <div className={`stream-item ${item.watched ? "watched" : ""}`}>
+      <div className="stream-info">
+        <span className="play-icon">
+          <Icon name="movie" />
+        </span>
+
+        {isEditing ? (
+          <input
+            type="text"
+            value={editTitle}
+            aria-label="Edit movie title"
+            onChange={(event) => onEditTitle(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                onSave();
+              }
+              if (event.key === "Escape") {
+                onCancel();
+              }
+            }}
+          />
+        ) : (
+          <span className="stream-title">{item.title}</span>
+        )}
+      </div>
+
+      <div className="stream-actions">
+        {isEditing ? (
+          <>
+            <button type="button" onClick={onSave}>
+              <Icon name="save" /> Save
+            </button>
+
+            <button type="button" onClick={onCancel}>
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <button type="button" onClick={onStartEdit}>
+              <Icon name="edit" /> Edit
+            </button>
+
+            <button
+              type="button"
+              className="watch-button"
+              onClick={onToggle}
+            >
+              <Icon
+                name={
+                  item.watched
+                    ? "check_circle"
+                    : "visibility"
+                }
+              />
+              {item.watched ? "Watched" : "Mark Watched"}
+            </button>
+
+            <button
+              type="button"
+              className="remove-button"
+              onClick={onRemove}
+            >
+              <Icon name="delete" /> Remove
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function StreamList({ items, setItems }) {
+  const [editingId, setEditingId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("all");
+
+  const handleAdd = (title) => {
     const newItem = {
       id: crypto.randomUUID(),
       title,
@@ -37,7 +168,6 @@ function StreamList({ items, setItems }) {
     };
 
     setItems((previous) => [...previous, newItem]);
-    event.target.reset();
   };
 
   const toggleWatched = (id) => {
@@ -108,43 +238,18 @@ function StreamList({ items, setItems }) {
           Keep track of the movies and shows you don't want to miss.
         </p>
 
-        <form className="stream-form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="title"
-            placeholder="Enter a movie or show..."
-            aria-label="Movie or show title"
-            required
-          />
-
-          <button type="submit">
-            <Icon name="add_circle" /> Add to StreamList
-          </button>
-        </form>
+        <AddTitleForm onAdd={handleAdd} />
 
         <p className="subtitle">
           {items.length} saved • {watchedCount} watched
         </p>
 
-        <div className="stream-form">
-          <input
-            type="search"
-            placeholder="Search your StreamList..."
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            aria-label="Search saved titles"
-          />
-
-          <select
-            value={filter}
-            onChange={(event) => setFilter(event.target.value)}
-            aria-label="Filter watchlist"
-          >
-            <option value="all">All Titles</option>
-            <option value="unwatched">Not Watched</option>
-            <option value="watched">Watched</option>
-          </select>
-        </div>
+        <FilterBar
+          search={search}
+          setSearch={setSearch}
+          filter={filter}
+          setFilter={setFilter}
+        />
 
         <div className="stream-list">
           {filteredItems.length === 0 ? (
@@ -155,99 +260,21 @@ function StreamList({ items, setItems }) {
             </p>
           ) : (
             filteredItems.map((item) => (
-              <div
-                className={`stream-item ${
-                  item.watched ? "watched" : ""
-                }`}
+              <StreamItem
                 key={item.id}
-              >
-                <div className="stream-info">
-                  <span className="play-icon">
-                    <Icon name="movie" />
-                  </span>
-
-                  {editingId === item.id ? (
-                    <input
-                      type="text"
-                      value={editTitle}
-                      aria-label="Edit movie title"
-                      onChange={(event) =>
-                        setEditTitle(event.target.value)
-                      }
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          saveEdit(item.id);
-                        }
-                        if (event.key === "Escape") {
-                          setEditingId(null);
-                          setEditTitle("");
-                        }
-                      }}
-                    />
-                  ) : (
-                    <span className="stream-title">
-                      {item.title}
-                    </span>
-                  )}
-                </div>
-
-                <div className="stream-actions">
-                  {editingId === item.id ? (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() => saveEdit(item.id)}
-                      >
-                        <Icon name="save" /> Save
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setEditingId(null);
-                          setEditTitle("");
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() => startEditing(item)}
-                      >
-                        <Icon name="edit" /> Edit
-                      </button>
-
-                      <button
-                        type="button"
-                        className="watch-button"
-                        onClick={() => toggleWatched(item.id)}
-                      >
-                        <Icon
-                          name={
-                            item.watched
-                              ? "check_circle"
-                              : "visibility"
-                          }
-                        />
-                        {item.watched
-                          ? "Watched"
-                          : "Mark Watched"}
-                      </button>
-
-                      <button
-                        type="button"
-                        className="remove-button"
-                        onClick={() => removeItem(item.id)}
-                      >
-                        <Icon name="delete" /> Remove
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
+                item={item}
+                isEditing={editingId === item.id}
+                editTitle={editTitle}
+                onEditTitle={setEditTitle}
+                onSave={() => saveEdit(item.id)}
+                onCancel={() => {
+                  setEditingId(null);
+                  setEditTitle("");
+                }}
+                onToggle={() => toggleWatched(item.id)}
+                onRemove={() => removeItem(item.id)}
+                onStartEdit={() => startEditing(item)}
+              />
             ))
           )}
         </div>
